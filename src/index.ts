@@ -1,14 +1,10 @@
-import express from "express";
+import "dotenv/config";
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon } from "@neondatabase/serverless";
 
-const app = express();
-const PORT = 8000;
+if (!process.env.DATABASE_URL) {
+	throw new Error("DATABASE_URL is not defined");
+}
 
-app.use(express.json());
-
-app.get("/", (req, res) => {
-	res.send("Backend server is running!");
-});
-
-app.listen(PORT, () => {
-	console.log(`Server running at http://localhost:${PORT}`);
-});
+const sql = neon(process.env.DATABASE_URL);
+export const db = drizzle(sql);
